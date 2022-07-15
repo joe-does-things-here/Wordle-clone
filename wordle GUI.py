@@ -1,6 +1,6 @@
 """
 Written by: Joe B
-last edit: 22/04/2022
+last edit: 15/07/2022
 
 A wordle clone using tkinter for graphics!
 """
@@ -11,6 +11,8 @@ import csv
 from os.path import exists
 import os 
 import sys 
+import time
+
 root = tk.Tk() #creates a new window for all tkinter widgets to go inside
 root.title("Wordle Clone") #titles it
 
@@ -76,7 +78,7 @@ def scanWord(userWord):
     for i in range(5):
         if userWord == Word: #if the user guesses the word correctly
             if row == 0:
-                X0Y0.config(bg="#00ff00")
+                X0Y0.config(bg="#00ff00") #colour code for green
                 X1Y0.config(bg="#00ff00")
                 X2Y0.config(bg="#00ff00")
                 X3Y0.config(bg="#00ff00")
@@ -111,19 +113,19 @@ def scanWord(userWord):
                 X2Y5.config(bg="#00ff00")
                 X3Y5.config(bg="#00ff00")
                 X4Y5.config(bg="#00ff00")
-            textIn = ttk.Label(utils, width=5) #replaces textIn with a label so the user can't input anything
-            textIn.grid(row=6, column=1,columnspan=3) #places it on the grid
+            textIn = ttk.Label(utils, width=5) #replaces the text input with an empty label so the user can't input anything else
+            textIn.grid(row=6, column=1,columnspan=3)
         elif Word[i] == userWord[i]: #if the letter is in the correct place
             if row == 0 and i == 0:
                 X0Y0.config(bg="#00ff00")
             elif row == 0 and i == 1:
-                X1Y0.config(bg="##00ff00")
+                X1Y0.config(bg="#00ff00")
             elif row == 0 and i == 2:
-                X2Y0.config(bg="##00ff00")
+                X2Y0.config(bg="#00ff00")
             elif row == 0 and i == 3:
-                X3Y0.config(bg="##00ff00")
+                X3Y0.config(bg="#00ff00")
             elif row == 0 and i == 4:
-                X4Y0.config(bg="##00ff00")
+                X4Y0.config(bg="#00ff00")
             elif row == 1 and i == 0:
                 X0Y1.config(bg="#00ff00")
             elif row == 1 and i == 1:
@@ -155,7 +157,7 @@ def scanWord(userWord):
             elif row == 3 and i == 4:
                 X4Y4.config(bg="#00ff00")
             elif row == 4 and i == 0:
-                X0Y4.config(bg="00ff00")
+                X0Y4.config(bg="#00ff00")
             elif row == 4 and i == 1:
                 X1Y4.config(bg="#00ff00")
             elif row == 4 and i == 2:
@@ -176,7 +178,7 @@ def scanWord(userWord):
                 X4Y5.config(bg="#00ff00")
         elif userWord[i] in Word: #if the letter is in the final word
             if row == 0 and i == 0:
-                X0Y0.config(bg="#FFA500")
+                X0Y0.config(bg="#FFA500") #colour code for the orange I'm using
             elif row == 0 and i == 1:
                 X1Y0.config(bg="#FFA500")
             elif row == 0 and i == 2:
@@ -186,7 +188,7 @@ def scanWord(userWord):
             elif row == 0 and i == 4:
                 X4Y0.config(bg="#FFA500")
             elif row == 1 and i == 0:
-                X0Y1.config(bg="FFA500")
+                X0Y1.config(bg="#FFA500")
             elif row == 1 and i == 1:
                 X1Y1.config(bg="#FFA500")
             elif row == 1 and i == 2:
@@ -196,7 +198,7 @@ def scanWord(userWord):
             elif row == 1 and i == 4:
                 X4Y1.config(bg="#FFA500")
             elif row == 2 and i == 0:
-                X0Y2.config(bg="FFA500")
+                X0Y2.config(bg="#FFA500")
             elif row == 2 and i == 1:
                 X1Y2.config(bg="#FFA500")
             elif row == 2 and i == 2:
@@ -206,7 +208,7 @@ def scanWord(userWord):
             elif row == 2 and i == 4:
                 X4Y2.config(bg="#FFA500")
             elif row == 3 and i == 0:
-                X0Y3.config(bg="FFA500")
+                X0Y3.config(bg="#FFA500")
             elif row == 3 and i == 1:
                 X1Y3.config(bg="#FFA500")
             elif row == 3 and i == 2:
@@ -226,7 +228,7 @@ def scanWord(userWord):
             elif row == 4 and i == 4:
                 X4Y4.config(bg="#FFA500")
             elif row == 5 and i == 0:
-                X0Y4.config(bg="FFA500")
+                X0Y4.config(bg="#FFA500")
             elif row == 5 and i == 1:
                 X1Y5.config(bg="#FFA500")
             elif row == 5 and i == 2:
@@ -238,9 +240,9 @@ def scanWord(userWord):
         else: #if the letter isn't in the final word
             pass
         root.update()
-def displayWord():
+def displayWord(user):
     global row
-    userWord = userInput.get()
+    userWord = user
     if row == 0:
         X0Y0.insert(0.0,userWord[0])
         X1Y0.insert(0.0,userWord[1])
@@ -281,6 +283,12 @@ def displayWord():
         pass
     scanWord(userWord)
     row = row+1
+def userSubmit():
+    user = userInput.get() #gets the users input and stores it in the variable "user"
+    if len(user) != 5: 
+        pass #ignores the press if the word is less than or more than 5 characters in length
+    else:
+        displayWord(user) #displays the word on the board
 #############################
 X0Y0 = tk.Text(game, bg="gray", height=2, width=2) 
 X0Y0.grid(row=0, column=0)
@@ -348,17 +356,10 @@ X3Y5.grid(row=5, column=3)
 X4Y5 = tk.Text(game, bg="gray", height=2, width=2)
 X4Y5.grid(row=5, column=4)
 
-def userSubmit(): #code that runs when the user enters a guess
-    user = userInput.get() #gets the users input and stores it in the variable "user"
-    if len(user) != 5:
-        pass
-    else:
-        displayWord() #displays the word on the board
-
 prompt = tk.Label(utils,text="enter text: ")
 prompt.grid(row=6, column=0)
 
-textIn = ttk.Entry(utils, width=5, textvariable=userInput)
+textIn = ttk.Entry(utils, width=6, textvariable=userInput)
 textIn.grid(row=6, column=1,columnspan=3)
 
 submit = tk.Button(utils,text="submit", command=lambda: userSubmit())
@@ -367,4 +368,5 @@ submit.grid(row=6, column=4)
 game.pack()
 utils.pack()
 getWord() #gets the word
+print(Word)
 root.mainloop() #displays the graphics
